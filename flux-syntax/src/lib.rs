@@ -1,11 +1,12 @@
 #![warn(unused_extern_crates)]
-#![feature(rustc_private)]
+#![feature(rustc_private, box_patterns)]
 
 extern crate rustc_ast;
 extern crate rustc_span;
 
 pub mod lexer;
 pub mod surface;
+pub mod visit;
 
 use lalrpop_util::lalrpop_mod;
 use lexer::{Cursor, Location, Token};
