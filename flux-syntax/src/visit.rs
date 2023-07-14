@@ -1,3 +1,7 @@
+//! AST walker. Each overridden visit method has full control over what happens with its node, it can
+//! do its own traversal of the node’s children, call visit::walk_* to apply the default traversal
+//! algorithm, or prevent deeper traversal by doing nothing.
+
 use rustc_span::symbol::Ident;
 
 use crate::surface::{
@@ -5,6 +9,11 @@ use crate::surface::{
     RefineParam, Sort, Ty, TyKind,
 };
 
+/// Each method of the Visitor trait is a hook to be potentially overridden. Each method’s default
+/// implementation recursively visits the substructure of the input via the corresponding walk method;
+/// e.g., the `visit_fn_sig` method by default calls `visit::walk_fn_sig`. When overriding a method
+/// you can prevent deeper traversal by doing nothing or continue with the default traversal by calling
+/// the corresponding walk method.
 pub trait Visitor: Sized {
     fn visit_fn_sig(&mut self, fn_sig: &FnSig) {
         walk_fn_sig(self, fn_sig);
