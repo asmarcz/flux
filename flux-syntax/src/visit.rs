@@ -191,7 +191,10 @@ pub fn walk_refine_arg<V: Visitor>(visitor: &mut V, arg: &RefineArg) {
     match arg {
         RefineArg::Expr(expr) => visitor.visit_expr(expr),
         RefineArg::Bind(ident, ..) => visitor.visit_ident(*ident),
-        RefineArg::Abs(_, body, _) => visitor.visit_expr(body),
+        RefineArg::Abs(params, body, _) => {
+            walk_list!(visitor, visit_refine_param, params);
+            visitor.visit_expr(body);
+        }
     }
 }
 
